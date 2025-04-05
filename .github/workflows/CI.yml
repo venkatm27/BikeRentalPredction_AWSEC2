@@ -70,7 +70,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: my-build-package
-        path: dist/*.whl
+        path: bikeshare_project/dist/*.whl
         retention-days: 1
 
   push-image:
@@ -103,12 +103,17 @@ jobs:
     - name: Build the Docker image for Fastapi app
       # env:
       #   DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
-      run: docker build . -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/bikeshare_proj_aws_ec2:latest
+             
+      run: |
+        cd bikeshare_project/
+        docker build . -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/bikeshare_proj_aws_ec2:latest
 
     - name: Push the Docker Image
       # env:
       #   DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/bikeshare_proj_aws_ec2
+      run: |
+        cd bikeshare_project/
+        docker push ${{ secrets.DOCKER_USERNAME }}/bikeshare_proj_aws_ec2
 
     - name: Logout to Docker hub
       run: docker logout
